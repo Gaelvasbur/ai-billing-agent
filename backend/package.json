@@ -1,0 +1,28 @@
+{
+  "name": "ai-billing-agent",
+  "version": "1.0.0",
+  "description": "MVP monolítico de agente de facturación con IA",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "express",
+    "stripe",
+    "openai",
+    "billing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "openai": "^4.68.4",
+    "pg": "^8.13.1",
+    "stripe": "^17.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

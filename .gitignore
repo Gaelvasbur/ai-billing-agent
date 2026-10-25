@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (credenciales)
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cobertura y artefactos de pruebas
+coverage/
+.nyc_output/
+
+# Caché de npm
+.npm/
