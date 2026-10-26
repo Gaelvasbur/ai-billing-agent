@@ -11,6 +11,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const createCheckoutSession = async (req, res) => {
   const { email, amount } = req.body;
 
+  // Fallback configuration ensuring seamless navigation transitions between cloud environments
+  const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
   try {
     // 1. Check if the user already exists in our PostgreSQL database
     let userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -42,6 +45,7 @@ export const createCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       customer: user.stripe_customer_id,
       payment_method_types: ['card'],
+      locale: 'en', // Enforces strict English localization across Checkout overlays and Link authentication forms
       line_items: [
         {
           price_data: {
@@ -55,8 +59,8 @@ export const createCheckoutSession = async (req, res) => {
         },
       ],
       mode: 'payment', 
-      success_url: 'http://localhost:5173/?success=true', 
-      cancel_url: 'http://localhost:5173/?canceled=true', 
+      success_url: `${FRONTEND_URL}/?success=true`, // Dynamic production routing injection
+      cancel_url: `${FRONTEND_URL}/?canceled=true`, 
     });
 
     // Return the secure Stripe checkout URL back to the client/frontend
