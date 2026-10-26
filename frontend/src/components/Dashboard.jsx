@@ -14,6 +14,9 @@ export default function Dashboard() {
   ]);
   const [chatLoading, setChatLoading] = useState(false);
 
+  // Production API environmental fallback handler
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
   // Handler to trigger the Stripe Checkout Session creation
   const handleCheckout = async (e) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ export default function Dashboard() {
     
     setStripeLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/stripe/checkout', {
+      const response = await fetch(`${API_URL}/api/stripe/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, amount: Number(amount) }),
@@ -54,7 +57,7 @@ export default function Dashboard() {
     setChatLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/agent/chat', {
+      const response = await fetch(`${API_URL}/api/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage }),
@@ -108,7 +111,7 @@ export default function Dashboard() {
             </div>
 
             <button type="submit" className="btn btn-stripe" disabled={stripeLoading}>
-              {stripeLoading ? 'Redirecting to Stripe...' : 'Launch Stripe Secure Checkout'}
+              {stripeLoading ? 'Waking up cloud AI Agent server... This might take up to 60s on the free tier. Thanks for your patience!' : 'Launch Stripe Secure Checkout'}
             </button>
           </form>
         </section>
@@ -131,7 +134,8 @@ export default function Dashboard() {
               {chatLoading && (
                 <div className="chat-bubble-container agent">
                   <div className="chat-bubble agent loading-bubble">
-                    <p>Agent is running tools and evaluating database...</p>
+                    {/* UI UX optimization handling API cold starts gracefully for corporate reviewers */}
+                    <p>Agent is running tools... (Waking up server might take up to 60s on the free tier, thank you for your patience!)</p>
                   </div>
                 </div>
               )}
