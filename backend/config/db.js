@@ -6,14 +6,21 @@ dotenv.config();
 
 const { Pool } = pg;
 
-// Pool: reutilices Postgres connections instead of opening a new one in each query.
-export const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-});
+// Hybrid Pool configuration: prioritizes production URL connection string, falls back to local distinct envs.
+export const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false, // Required for secure cloud cloud databases like Neon or Supabase
+      },
+    })
+  : new Pool({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+    });
 
 // Creates the MVP tables if not existing yet
 export async function initDb() {
