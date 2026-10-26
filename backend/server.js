@@ -48,9 +48,9 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   try {
     await initDb();
-    console.log(`Server successfully running on http://localhost:${PORT}`);
+    console.log(`Server successfully running on port ${PORT}`);
   } catch (error) {
-    console.error("Could not connect to PostgreSQL. Is the Docker container running?");
+    console.error("Critical: Could not connect to PostgreSQL database orchestration engine.");
     console.error(error.message);
   }
 });
